@@ -6,23 +6,28 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 import matplotlib.pyplot as plt
-import io
 
 st.set_page_config(page_title="F1 Season Winner Predictor", layout="wide")
 
 st.title("🏎️ F1 Season Winner Predictor")
-st.write("Upload your F1 dataset and predict the next season's champion using machine learning.")
+st.write("Predict the next season's champion using machine learning with the F1 dataset.")
 
 
 # ============================
-# Upload File
+# Load File
 # ============================
 
-uploaded = st.file_uploader("Upload F1_flat_final.xlsx", type=["xlsx"])
+try:
+    df = pd.read_excel("F1.xlsx")
+    st.success("F1 dataset loaded successfully!")
+except FileNotFoundError:
+    st.error("❌ File 'F1.xlsx' not found. Please make sure the file exists in the same directory as app.py")
+    st.stop()
+except Exception as e:
+    st.error(f"❌ Error loading file: {str(e)}")
+    st.stop()
 
-if uploaded is not None:
-    df = pd.read_excel(uploaded)
-    st.success("File uploaded successfully!")
+if df is not None:
 
     st.write("### Preview of Dataset")
     st.dataframe(df.head())
